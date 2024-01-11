@@ -93,19 +93,19 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        
+        // dd($data);
+
         $request->validate([
             'title' => ['required', 'max:255', 'string', Rule::unique('projects')->ignore($project->id)],
             'content' => 'nullable|min:5|string',
             'type_id' => 'nullable|exists:types,id',
             'technologies' => 'exists:technologies,id'
         ]);
-
         $data = $request->all();
-
-        // dd($data);
-
         $data['slug'] = Str::slug($data['title'], '-');
 
+    
         $project->update($data);
 
         // TECHNOLOGY EDIT LOGIC : 
