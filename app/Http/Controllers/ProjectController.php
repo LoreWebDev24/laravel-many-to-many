@@ -40,8 +40,8 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::orderBy('name', 'ASC')->get();
-        $tecnologys = Technology::orderBy('name', 'ASC')->get();
-        return view('admin.projects.create',compact('types'));
+        $technologies = Technology::orderBy('name', 'ASC')->get();
+        return view('admin.projects.create',compact('types','technologies'));
     }
 
     /**
@@ -53,7 +53,7 @@ class ProjectController extends Controller
             'title' => 'required|max:255|string|unique:projects',
             'content' => 'nullable|min:5|string',
             'type_id' => 'nullable|exists:types,id',
-            'technologies' => 'exists:technologys,id'
+            'technologies' => 'exists:technologies,id'
         ]);
 
         $data = $request->all();
@@ -62,7 +62,7 @@ class ProjectController extends Controller
         $project = Project::create($data);
 
         if ($request->has('technologies')) {
-            $project->tags()->attach($data['projects']);
+            $project->technologies()->attach($data['technologies']);
         }
 
 
@@ -97,7 +97,7 @@ class ProjectController extends Controller
             'title' => ['required', 'max:255', 'string', Rule::unique('projects')->ignore($project->id)],
             'content' => 'nullable|min:5|string',
             'type_id' => 'nullable|exists:types,id',
-            'technologies' => 'exists:technologys,id'
+            'technologies' => 'exists:technologies,id'
         ]);
 
         $data = $request->all();
@@ -111,9 +111,9 @@ class ProjectController extends Controller
         // TECHNOLOGY EDIT LOGIC : 
 
         if ($request->has('technologies')) {
-            $project->tags()->sync($data['technologies']);
+            $project->technologies()->sync($data['technologies']);
         } else {
-            $project->tags()->detach();
+            $project->technologies()->detach();
         }
 
         return redirect()->route('admin.projects.show', $project);

@@ -36,7 +36,7 @@
             @foreach ($technologies as $technology)
               <div class="form-check">
                 <input name="technologies[]" class="form-check-input" type="checkbox" value="{{$technology->id}}" id="tag-{{$technology->id}}" @checked( in_array($technology->id, old('technologies',$project->technologies->pluck('id')->all()) ) ) >
-                <label class="form-check-label" for="tag-{{$technologies->id}}">
+                <label class="form-check-label" for="tag-{{$technology->id}}">
                   {{ $technology->name }}
                 </label>
               </div>
